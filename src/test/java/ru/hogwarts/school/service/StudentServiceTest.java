@@ -1,59 +1,71 @@
 package ru.hogwarts.school.service;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import ru.hogwarts.school.model.Student;
+import ru.hogwarts.school.repository.StudentRepository;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.Mockito.*;
+import static ru.hogwarts.school.constants.StudentServiceTestConstants.*;
 
+@ExtendWith(MockitoExtension.class)
 class StudentServiceTest {
-    StudentServiceImpl service = new StudentServiceImpl();
 
-    @BeforeEach
-    void add_students (){
-        service.addStudent(new Student( "Peter", 12));
-        service.addStudent(new Student( "Harry", 11));
-        service.addStudent(new Student( "Hermione", 11));
-        service.addStudent(new Student( "George", 13));
-        service.addStudent(new Student( "Fred", 13));
-    }
+    @Mock
+    private StudentRepository repository;
+
+    @InjectMocks
+    private StudentServiceImpl out;
+
 
     @Test
     void addStudent() {
-        Student newStudent = new Student("Ronald", 11);
-        Student additionalStudent = service.addStudent(newStudent);
+        when(repository.save(any())).thenReturn(HARRY);
 
-        assertEquals(newStudent, additionalStudent);
+        Student expectedStudent = new Student("Harry", 11);
+        assertEquals(out.addStudent(any()), expectedStudent);
     }
 
     @Test
     void getStudentById() {
-        Student newStudent = new Student("Ronald", 11);
-        service.addStudent(newStudent);
-        assertEquals(newStudent, service.getStudentById(6L));
+        when(repository.findById(any())).thenReturn(Optional.of(HARRY));
+        Student expectedStudent = new Student("Harry", 11);
+        assertEquals(out.getStudentById(1L), expectedStudent);
+
     }
 
     @Test
     void changeStudent() {
-        Student newStudent = new Student("Draco", 11);
-        service.changeStudent(3L, newStudent);
-        assertEquals(newStudent, service.getStudentById(3L));
+        when(repository.save(any())).thenReturn(FRED);
+
+        Student expectedStudent = new Student("Fred", 13);
+        assertEquals(out.changeStudent(any()), expectedStudent);
     }
 
     @Test
     void deleteStudent() {
-        Student deletedStudent = service.deleteStudent(1L);
-        assertNull(service.getStudentById(1L));
+        assertThrows(NoSuchElementException.class,() -> out.deleteStudent(1L));
     }
 
     @Test
     void getStudentsByAge() {
+        when(repository.findAll()).thenReturn(STUDENTS);
+
         List<Student> expectedListByAge = new ArrayList<>();
-        expectedListByAge.add(service.getStudentById(2L));
-        expectedListByAge.add(service.getStudentById(3L));
-        assertEquals(expectedListByAge, service.getStudentsByAge(11));
+
+        expectedListByAge.add(FRED);
+        expectedListByAge.add(GEORGE);
+
+        assertEquals(expectedListByAge, out.getStudentsByAge(13));
     }
 }

@@ -44,7 +44,7 @@ public class StudentController {
 
     @PutMapping ("/change")
     public ResponseEntity<Student> changeStudent(@RequestBody Student student) {
-        Student changedStudent = service.changeStudent(student.getId(), student);
+        Student changedStudent = service.changeStudent(student);
         if (changedStudent == null) {
             return ResponseEntity.notFound().build();
         }

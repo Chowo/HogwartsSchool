@@ -2,58 +2,74 @@ package ru.hogwarts.school.service;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import ru.hogwarts.school.model.Faculty;
+import ru.hogwarts.school.model.Student;
+import ru.hogwarts.school.repository.FacultyRepository;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.Mockito.*;
+import static ru.hogwarts.school.constants.FacultyServiceTestConstants.*;
+import static ru.hogwarts.school.constants.StudentServiceTestConstants.*;
+import static ru.hogwarts.school.constants.StudentServiceTestConstants.GEORGE;
+
+@ExtendWith(MockitoExtension.class)
 class FacultyServiceTest {
 
-    FacultyServiceImpl service = new FacultyServiceImpl();
+    @Mock
+    private FacultyRepository repository;
 
-    @BeforeEach
-    void add_faculties() {
-        service.addFaculty(new Faculty( "Hufflepuff", "orange"));
-        service.addFaculty(new Faculty( "Slytherin", "green"));
+    @InjectMocks
+    private FacultyServiceImpl out;
 
-        service.addFaculty(new Faculty( "Somenew", "green"));
-    }
 
     @Test
     void addFaculty() {
-        Faculty newFaculty = new Faculty("Gryffindor", "red");
-        service.addFaculty(newFaculty);
-        assertEquals(newFaculty, service.getFacultyById(5L));
+        when(repository.save(any())).thenReturn(FACULTY1);
+
+        Faculty expectedFaculty = new Faculty("Hufflepuff", "Yellow");
+        assertEquals(out.addFaculty(any()), expectedFaculty);
     }
 
     @Test
     void getFacultyById() {
-        Faculty expectedFaculty = new Faculty( "Ravenclaw", "blue");
-        service.addFaculty(expectedFaculty);
-        assertEquals(expectedFaculty, service.getFacultyById(4L));
+        when(repository.findById(any())).thenReturn(Optional.of(FACULTY1));
+
+        Faculty expectedFaculty = new Faculty("Hufflepuff", "Yellow");
+        assertEquals(out.getFacultyById(1L), expectedFaculty);
     }
 
     @Test
     void changeFaculty() {
-        Faculty newFaculty = new Faculty( "Gryffindor", "red");
-        service.changeFaculty(4L, newFaculty);
-        assertEquals(newFaculty, service.getFacultyById(4L));
+        when(repository.save(any())).thenReturn(FACULTY2);
+
+        Faculty expectedFaculty = new Faculty("Ravenclaw", "blue");
+        assertEquals(out.changeFaculty(any()), expectedFaculty);
+
     }
 
     @Test
     void deleteFaculty() {
-        Faculty deletedFaculty = service.deleteFaculty(4L);
-        assertNull(service.getFacultyById(4L));
+        assertThrows(NoSuchElementException.class,() -> out.deleteFaculty(1L));
     }
 
     @Test
     void getListOfFacultiesByColor() {
-        List<Faculty> expectedList = new ArrayList<>();
-        expectedList.add(new Faculty( "Slytherin", "green"));
-        expectedList.get(0).setId(2L);
-        expectedList.add(new Faculty("Somenew", "green"));
-        expectedList.get(1).setId(3L);
-        assertEquals(expectedList, service.getListOfFacultiesByColor("green"));
+        when(repository.findAll()).thenReturn(FACULTIES);
+
+        List<Faculty> expectedListByAge = new ArrayList<>();
+
+        expectedListByAge.add(FACULTY3);
+
+        assertEquals(expectedListByAge, out.getListOfFacultiesByColor("green"));
     }
 }

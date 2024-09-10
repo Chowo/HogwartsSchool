@@ -9,7 +9,7 @@ public interface FacultyService {
 
     Faculty getFacultyById(Long id);
 
-    Faculty changeFaculty(Long id, Faculty faculty);
+    Faculty changeFaculty(Faculty faculty);
 
     Faculty deleteFaculty(Long id);
 
