@@ -5,6 +5,7 @@ import ru.hogwarts.school.model.Faculty;
 import ru.hogwarts.school.repository.FacultyRepository;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 @Service
@@ -39,14 +40,8 @@ public class FacultyServiceImpl implements FacultyService {
     }
 
     @Override
-    public List<Faculty> getListOfFacultiesByColor(String color) {
-        List <Faculty> allFaculties = repository.findAll();
-        List<Faculty> listOfFaculties = new ArrayList<>();
-        for (Faculty faculty : allFaculties) {
-            if (faculty.getColor().equals(color)) {
-                listOfFaculties.add(faculty);
-            }
-        }
-        return listOfFaculties;
+    public Collection<Faculty> getListOfFacultiesByColor(String color) {
+
+        return repository.findAllFacultiesByColor(color);
     }
 }

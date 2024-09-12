@@ -5,9 +5,7 @@ import ru.hogwarts.school.model.Student;
 import ru.hogwarts.school.repository.StudentRepository;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @Service
 public class StudentServiceImpl implements StudentService {
@@ -42,13 +40,7 @@ public class StudentServiceImpl implements StudentService {
 
     @Override
     public List<Student> getStudentsByAge(int age) {
-        List<Student> listOfAllStudents = repository.findAll();
-        List<Student> goalAgeList = new ArrayList<>();
-        for (Student student : listOfAllStudents) {
-            if (student.getAge() == age) {
-                goalAgeList.add(student);
-            }
-        }
-        return goalAgeList;
+
+        return (List<Student>) repository.findStudentsByAge(age);
     }
 }

@@ -5,7 +5,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.hogwarts.school.model.Student;
 import ru.hogwarts.school.service.StudentService;
-import ru.hogwarts.school.service.StudentServiceImpl;
 
 import java.util.List;
 
@@ -18,16 +17,7 @@ public class StudentController {
         this.service = service;
     }
 
-    @PostConstruct
-    public void init() {
-        service.addStudent(new Student("Harry", 11));
-        service.addStudent(new Student("Ron", 11));
-        service.addStudent(new Student("Hermione", 11));
-        service.addStudent(new Student("Fred", 13));
-        service.addStudent(new Student("George", 13));
-    }
-
-    @PostMapping ("/add")
+    @PostMapping("/add")
     public ResponseEntity<Student> addStudent(@RequestBody Student student) {
         Student addedStudent = service.addStudent(student);
         return ResponseEntity.ok(addedStudent);
@@ -42,7 +32,7 @@ public class StudentController {
         return ResponseEntity.ok(student);
     }
 
-    @PutMapping ("/change")
+    @PutMapping("/change")
     public ResponseEntity<Student> changeStudent(@RequestBody Student student) {
         Student changedStudent = service.changeStudent(student);
         if (changedStudent == null) {

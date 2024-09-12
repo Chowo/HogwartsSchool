@@ -4,9 +4,7 @@ import jakarta.annotation.PostConstruct;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.hogwarts.school.model.Faculty;
-import ru.hogwarts.school.model.Student;
 import ru.hogwarts.school.service.FacultyService;
-import ru.hogwarts.school.service.FacultyServiceImpl;
 
 import java.util.List;
 
@@ -17,14 +15,6 @@ public class FacultyController {
 
     public FacultyController(FacultyService service) {
         this.service = service;
-    }
-
-    @PostConstruct
-    public void init() {
-        service.addFaculty(new Faculty("test1", "red"));
-        service.addFaculty(new Faculty("test2", "blue"));
-        service.addFaculty(new Faculty("test3", "green"));
-        service.addFaculty(new Faculty("test4", "red"));
     }
 
     @PostMapping("/add")
@@ -62,7 +52,7 @@ public class FacultyController {
 
     @GetMapping("/color")
     public ResponseEntity<List<Faculty>> getListOfFacultiesByColor(String color) {
-        List<Faculty> listOfFaculties = service.getListOfFacultiesByColor(color);
+        List<Faculty> listOfFaculties = (List<Faculty>) service.getListOfFacultiesByColor(color);
         if (listOfFaculties.isEmpty()) {
             return ResponseEntity.notFound().build();
         }
