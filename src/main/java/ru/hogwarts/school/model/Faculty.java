@@ -19,6 +19,10 @@ public class Faculty {
         this.color = color;
     }
 
+    public Faculty() {
+
+    }
+
     @Override
     public String toString() {
         return "Faculty{" +

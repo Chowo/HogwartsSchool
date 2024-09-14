@@ -1,6 +1,5 @@
 package ru.hogwarts.school.controller;
 
-import jakarta.annotation.PostConstruct;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.hogwarts.school.model.Student;
