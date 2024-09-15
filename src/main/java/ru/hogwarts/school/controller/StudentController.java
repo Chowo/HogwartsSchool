@@ -7,8 +7,8 @@ import ru.hogwarts.school.service.StudentService;
 
 import java.util.List;
 
-@RequestMapping("/student")
 @RestController
+@RequestMapping("/student")
 public class StudentController {
     private final StudentService service;
 
@@ -23,7 +23,7 @@ public class StudentController {
     }
 
     @GetMapping("{id}/get")
-    public ResponseEntity<Student> getStudent(@PathVariable Long id) {
+    public ResponseEntity<Student> getStudent(@PathVariable ("id") Long id) {
         Student student = service.getStudentById(id);
         if (student == null) {
             return ResponseEntity.notFound().build();
@@ -31,21 +31,18 @@ public class StudentController {
         return ResponseEntity.ok(student);
     }
 
-    @PutMapping("/change")
-    public ResponseEntity<Student> changeStudent(@RequestBody Student student) {
-        Student changedStudent = service.changeStudent(student);
+    @PutMapping("{id}/update")
+    public ResponseEntity<Student> updateStudent(@PathVariable ("id") Long id, @RequestBody Student student) {
+        Student changedStudent = service.updateStudent(id, student);
         if (changedStudent == null) {
             return ResponseEntity.notFound().build();
         }
         return ResponseEntity.ok(changedStudent);
     }
 
-    @DeleteMapping("{id}/delete")
-    public ResponseEntity<Student> expelStudent(@PathVariable Long id) {
+    @DeleteMapping("{id}/remove")
+    public ResponseEntity<Student> expelStudent(@PathVariable ("id") Long id) {
         Student expelledStudent = service.deleteStudent(id);
-        if (expelledStudent == null) {
-            return ResponseEntity.notFound().build();
-        }
         return ResponseEntity.ok(expelledStudent);
     }
 

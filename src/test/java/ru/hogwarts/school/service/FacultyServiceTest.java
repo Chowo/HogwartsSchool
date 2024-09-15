@@ -50,7 +50,7 @@ class FacultyServiceTest {
         when(repository.save(any())).thenReturn(FACULTY2);
 
         Faculty expectedFaculty = new Faculty("Ravenclaw", "blue");
-        assertEquals(out.changeFaculty(any()), expectedFaculty);
+        assertEquals(out.updateFaculty(any(), any()), expectedFaculty);
 
     }
 
