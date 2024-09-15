@@ -1,28 +1,35 @@
 package ru.hogwarts.school.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
 public class Faculty {
 
     @Id
-    @GeneratedValue (strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     private String name;
     private String color;
 
+    @OneToMany
+    private List<Student> listOfFacultyStudents;
+
     public Faculty(String name, String color) {
         this.name = name;
         this.color = color;
+        listOfFacultyStudents = new ArrayList<>();
     }
 
     public Faculty() {
 
+    }
+
+    public List<Student> getListOfFacultyStudents() {
+        return listOfFacultyStudents;
     }
 
     @Override
