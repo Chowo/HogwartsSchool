@@ -1,5 +1,6 @@
 package ru.hogwarts.school.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.util.ArrayList;
@@ -16,6 +17,7 @@ public class Faculty {
     private String color;
 
     @OneToMany
+    @JsonIgnore
     private List<Student> listOfFacultyStudents;
 
     public Faculty(String name, String color) {
