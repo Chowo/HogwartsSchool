@@ -32,18 +32,11 @@ public class AvatarServiceImpl implements AvatarService {
 
     @Override
     public void uploadAvatar(Long studentId, MultipartFile avatarFile) throws IOException {
+        createDirectory();
         Student student = studentService.getStudentById(studentId);
         Path filePath = Path.of(avatarsDir, student + "." + getExtensions(avatarFile.getOriginalFilename()));
-        Files.createDirectories(filePath.getParent());
-        Files.deleteIfExists(filePath);
-        try (
-                InputStream inputStream = avatarFile.getInputStream();
-                OutputStream outputStream = Files.newOutputStream(filePath, CREATE_NEW);
-                BufferedInputStream bufferedInputStream = new BufferedInputStream(inputStream, 1024);
-                BufferedOutputStream bufferedOutputStream = new BufferedOutputStream(outputStream, 1024)
-        ) {
-            bufferedInputStream.transferTo(bufferedOutputStream);
-        }
+        avatarFile.transferTo(filePath);
+
         Avatar avatar = findAvatarByStudentId(studentId);
         avatar.setStudent(student);
         avatar.setFilePath(filePath.toString());
@@ -65,6 +58,13 @@ public class AvatarServiceImpl implements AvatarService {
 
     private String getExtensions(String fileName) {
         return fileName.substring(fileName.lastIndexOf(".") + 1);
+    }
+
+    private void createDirectory() throws IOException {
+        Path path = Path.of(avatarsDir);
+        if (Files.notExists(path)) {
+            Files.createDirectory(path);
+        }
     }
 
 
