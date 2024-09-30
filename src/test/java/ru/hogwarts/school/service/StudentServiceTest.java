@@ -50,7 +50,7 @@ class StudentServiceTest {
         when(repository.save(any())).thenReturn(FRED);
 
         Student expectedStudent = new Student("Fred", 13);
-        assertEquals(out.changeStudent(any()), expectedStudent);
+        assertEquals(out.updateStudent(any(), any()), expectedStudent);
     }
 
     @Test

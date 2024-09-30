@@ -34,6 +34,10 @@ public class Faculty {
         return listOfFacultyStudents;
     }
 
+    public void setListOfFacultyStudents(List<Student> listOfFacultyStudents) {
+        this.listOfFacultyStudents = listOfFacultyStudents;
+    }
+
     @Override
     public String toString() {
         return "Faculty{" +
