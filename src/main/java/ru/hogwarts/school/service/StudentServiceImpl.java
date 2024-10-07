@@ -1,12 +1,12 @@
 package ru.hogwarts.school.service;
 
-import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 import ru.hogwarts.school.exception.StudentNotFoundException;
 import ru.hogwarts.school.model.Faculty;
 import ru.hogwarts.school.model.Student;
 import ru.hogwarts.school.repository.StudentRepository;
 
+import java.util.Collection;
 import java.util.List;
 
 @Service
@@ -58,6 +58,21 @@ public class StudentServiceImpl implements StudentService {
     @Override
     public Faculty getStudentsFaculty(long id) {
         return repository.findById(id).orElseThrow(() -> new StudentNotFoundException(id)).getFaculty();
+    }
+
+    @Override
+    public int getStudentsAmount() {
+        return repository.getStudentsAmount();
+    }
+
+    @Override
+    public double getAverageStudentsAge() {
+        return repository.getAverageAge();
+    }
+
+    @Override
+    public Collection<Student> getLeastFiveListedStudents() {
+        return repository.getFiveLastStudents();
     }
 
 }

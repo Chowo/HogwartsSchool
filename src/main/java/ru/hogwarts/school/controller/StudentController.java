@@ -71,5 +71,26 @@ public class StudentController {
         return ResponseEntity.ok(service.getStudentsFaculty(id)).getBody();
     }
 
+    @GetMapping("/get/amount")
+    public int getStudentsAmount() {
+
+        return service.getStudentsAmount();
+    }
+
+    @GetMapping("/get-average-age")
+    public double getAverageAge() {
+
+        return service.getAverageStudentsAge();
+    }
+
+    @GetMapping("/get/last-five")
+    public ResponseEntity<List<Student>> getLeastFiveListedStudents() {
+        List<Student> listOfStudents = (List<Student>) service.getLeastFiveListedStudents();
+        if (listOfStudents.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(listOfStudents);
+    }
+
 
 }

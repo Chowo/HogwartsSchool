@@ -3,6 +3,7 @@ package ru.hogwarts.school.service;
 import ru.hogwarts.school.model.Faculty;
 import ru.hogwarts.school.model.Student;
 
+import java.util.Collection;
 import java.util.List;
 
 public interface StudentService {
@@ -19,4 +20,10 @@ public interface StudentService {
     List<Student> getStudentsByAge(int age);
 
     Faculty getStudentsFaculty(long id);
+
+    int getStudentsAmount();
+
+    double getAverageStudentsAge();
+
+    Collection<Student> getLeastFiveListedStudents();
 }

@@ -199,5 +199,53 @@ public class StudentControllerTest {
         verify(studentRepository, Mockito.times(1) ).findById(any());
     }
 
+    @Test
+    public void getStudentsAmountTest() throws Exception {
+
+        when(studentRepository.getStudentsAmount()).thenReturn(1);
+
+        assertEquals(studentService.getStudentsAmount(), 1);
+
+    }
+
+    @Test
+    public void getStudentsAverageAgeTest() throws Exception {
+
+        when(studentRepository.getAverageAge()).thenReturn(12.4);
+
+        assertEquals(studentService.getAverageStudentsAge(), 12.4);
+
+    }
+
+    @Test
+    public void getLeastFiveListedStudentsTest() throws Exception {
+
+        Faculty faculty1 = new Faculty();
+        faculty1.setId(1L);
+        faculty1.setName("faculty1");
+        faculty1.setColor("red");
+
+        student1.setId(1L);
+        student1.setFaculty(faculty1);
+
+        student2.setId(2L);
+        student2.setFaculty(faculty1);
+        List<Student> studentsList = new ArrayList<>();
+        studentsList.add(student1);
+        studentsList.add(student2);
+
+        when(studentRepository.getFiveLastStudents()).thenReturn(studentsList);
+
+        mvc.perform(MockMvcRequestBuilders
+                        .get("/student/get/last-five")
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(MockMvcResultMatchers.content().json(mapper.writeValueAsString(studentsList)));
+
+        assertEquals(studentService.getLeastFiveListedStudents(), studentsList);
+    }
+
+
+
 }
 

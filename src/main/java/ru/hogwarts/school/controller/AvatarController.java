@@ -15,6 +15,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.List;
 
 @RestController
 @RequestMapping("/students-avatars")
@@ -27,7 +28,7 @@ public class AvatarController {
     }
 
     @PostMapping(value = "/{studentId}/avatar", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<String> uploadAvatar (@PathVariable Long studentId, @RequestParam MultipartFile avatar) throws IOException {
+    public ResponseEntity<String> uploadAvatar(@PathVariable Long studentId, @RequestParam MultipartFile avatar) throws IOException {
         avatarService.uploadAvatar(studentId, avatar);
         return ResponseEntity.ok().build();
     }
@@ -44,7 +45,7 @@ public class AvatarController {
     }
 
     @GetMapping(value = "/{id}/avatar-from-file")
-    public void downloadAvatar (@PathVariable Long id, HttpServletResponse response) throws IOException {
+    public void downloadAvatar(@PathVariable Long id, HttpServletResponse response) throws IOException {
         Avatar avatar = avatarService.findAvatar(id);
         Path path = Path.of(avatar.getFilePath());
         try (
@@ -55,5 +56,19 @@ public class AvatarController {
             response.setContentLength((int) avatar.getFileSize());
             inputStream.transferTo(outputStream);
         }
+    }
+
+    @GetMapping(value = "/get")
+    public ResponseEntity<List<Avatar>> getAllAvatars(@RequestParam("page") int page, @RequestParam("size") int size) {
+        List<Avatar> avatars = avatarService.getAllAvatars(page, size);
+        return ResponseEntity.ok(avatars);
+
+    }
+
+    @GetMapping(value = "/get-all")
+    public ResponseEntity<List<Avatar>> getAllAvatars() {
+        List<Avatar> avatars = avatarService.getAllAvatars();
+        return ResponseEntity.ok(avatars);
+
     }
 }
