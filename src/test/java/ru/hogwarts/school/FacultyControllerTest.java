@@ -62,15 +62,10 @@ public class FacultyControllerTest {
         facultyObject.put("name", name);
         facultyObject.put("color", color);
 
-        faculty1 = new Faculty();
-
-        faculty1.setName(name);
-        faculty1.setColor(color);
+        faculty1 = new Faculty(name, color);
         faculty1.setId(id);
 
-        faculty2 = new Faculty();
-        faculty2.setName(name);
-        faculty2.setColor(color);
+        faculty2 = new Faculty(name, color);
         faculty2.setId(id);
     }
 
@@ -125,7 +120,6 @@ public class FacultyControllerTest {
         //исходные данные
         when(facultyRepository.findById(ArgumentMatchers.any(Long.class))).thenReturn(Optional.of(faculty1));
 
-        //doNothing().when(facultyRepository).deleteById(id);
         //тестирование
         mvc.perform(MockMvcRequestBuilders
                 .delete("/faculty/" + faculty1.getId() + "/remove")
@@ -192,20 +186,12 @@ public class FacultyControllerTest {
 
     @Test
     public void getListOfFacultyStudentsTest() throws Exception {
-        Student student1 = new Student();
-        Student student2 = new Student();
-        String studentName1 = "name1";
-        String studentName2 = "name2";
-        int studentAge1 = 12;
-        int studentAge2 = 13;
+        Student student1 = new Student("name1", 12);
+        Student student2 = new Student("name2", 13);
         student1.setId(1L);
-        student1.setName(studentName1);
-        student1.setAge(studentAge1);
         student1.setFaculty(faculty1);
 
         student2.setId(2L);
-        student2.setName(studentName2);
-        student2.setAge(studentAge2);
         student2.setFaculty(faculty1);
         List<Student> studentsList = new ArrayList<>();
         studentsList.add(student1);

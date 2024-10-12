@@ -24,6 +24,7 @@ import ru.hogwarts.school.service.StudentServiceImpl;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.anyInt;
@@ -48,56 +49,17 @@ public class AvatarControllerTest {
     @SpyBean
     private StudentServiceImpl studentService;
 
-    private static Long ID1 = 1L;
-    private static Long ID2 = 2L;
-    private static String filePath = "/avatar";
-    private static long fileSize1 = 15647;
-    private static long fileSize2 = 8927;
-    private static String mediaType = "image/jpeg";
-    private byte[] data1 = {64, 12};
-    private byte[] data2 = {87, 122};
     private ObjectMapper mapper = new ObjectMapper();
-    private static JSONObject avatarObject;
 
     private static Avatar avatar1;
     private static Avatar avatar2;
 
-    private static Student student1;
-    private static Student student2;
 
     @BeforeEach
     void setup() throws Exception {
-        avatar1 = new Avatar();
-        avatar2 = new Avatar();
-        avatar1.setId(ID1);
-        avatar2.setId(ID2);
-        avatar1.setFilePath(filePath);
-        avatar2.setFilePath(filePath);
-        avatar1.setFileSize(fileSize1);
-        avatar2.setFileSize(fileSize2);
-        avatar1.setMediaType(mediaType);
-        avatar2.setMediaType(mediaType);
-        avatar1.setData(data1);
-        avatar1.setData(data2);
+        avatar1 = generateRandomAvatar();
+        avatar2 = generateRandomAvatar();
 
-        student1 = new Student();
-
-        student1.setName("name1");
-        student1.setAge(11);
-        student1.setId(1L);
-
-        student2 = new Student();
-        student2.setName("name2");
-        student2.setAge(12);
-        student2.setId(2L);
-
-        Faculty faculty = new Faculty("name", "color");
-        faculty.setId(1L);
-        student1.setFaculty(faculty);
-        student2.setFaculty(faculty);
-
-        avatar1.setStudent(student1);
-        avatar2.setStudent(student2);
     }
 
     @Test
@@ -117,6 +79,27 @@ public class AvatarControllerTest {
                 .andExpect(MockMvcResultMatchers.content().json(mapper.writeValueAsString(avatarList)));
 
         assertEquals(avatarRepository.findAll(), avatarList);
+    }
+
+    private Avatar generateRandomAvatar() {
+        Random random = new Random();
+        Faculty faculty = new Faculty("FacultyName", "FacultyColor");
+        faculty.setId(random.nextLong(1, 99));
+        Student student = new Student("Student Name", random.nextInt(11, 18));
+        student.setId(random.nextLong(1,99));
+        student.setFaculty(faculty);
+        Avatar avatar = new Avatar();
+        avatar.setStudent(student);
+        byte[] data = new byte[random.nextInt(1, 9)];
+        for (int i = 0; i < data.length; i++) {
+            data[i] = (byte) random.nextInt(1, 127);
+        }
+        avatar.setData(data);
+        avatar.setFileSize(random.nextInt(24567));
+        avatar.setMediaType("image/jpeg");
+        avatar.setFilePath("/avata");
+        avatar.setId(random.nextLong(1, 99));
+        return avatar;
     }
 
 }

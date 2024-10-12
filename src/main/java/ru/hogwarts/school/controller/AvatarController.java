@@ -60,15 +60,13 @@ public class AvatarController {
 
     @GetMapping(value = "/get")
     public ResponseEntity<List<Avatar>> getAllAvatars(@RequestParam("page") int page, @RequestParam("size") int size) {
-        List<Avatar> avatars = avatarService.getAllAvatars(page, size);
-        return ResponseEntity.ok(avatars);
+        return ResponseEntity.ok(avatarService.getAllAvatars(page, size));
 
     }
 
     @GetMapping(value = "/get-all")
     public ResponseEntity<List<Avatar>> getAllAvatars() {
-        List<Avatar> avatars = avatarService.getAllAvatars();
-        return ResponseEntity.ok(avatars);
+        return ResponseEntity.ok(avatarService.getAllAvatars());
 
     }
 }
