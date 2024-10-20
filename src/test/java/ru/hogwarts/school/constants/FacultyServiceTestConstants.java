@@ -6,10 +6,10 @@ import java.util.List;
 
 public class FacultyServiceTestConstants {
 
-    public static final Faculty FACULTY1 = new Faculty("Hufflepuff", "Yellow");
-    public static final Faculty FACULTY2 = new Faculty("Ravenclaw", "blue");
-    public static final Faculty FACULTY3 = new Faculty("Slytherin", "green");
+    public static final Faculty FACULTY1 = new Faculty(1L, "Hufflepuff", "Yellow");
+    public static final Faculty FACULTY2 = new Faculty(2L, "Ravenclaw", "blue");
+    public static final Faculty FACULTY3 = new Faculty(3L,"Slytherin", "green");
 
-    public static final List<Faculty> FACULTIES = List.of(FACULTY1, FACULTY2, FACULTY3);
+    public static final List<Faculty> FACULTIES = List.of(FACULTY3);
 
 }

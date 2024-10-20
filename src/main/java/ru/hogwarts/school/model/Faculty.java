@@ -26,6 +26,13 @@ public class Faculty {
         listOfFacultyStudents = new ArrayList<>();
     }
 
+    public Faculty(Long id, String name, String color) {
+        this.id = id;
+        this.name = name;
+        this.color = color;
+        listOfFacultyStudents = new ArrayList<>();
+    }
+
     public Faculty() {
 
     }

@@ -5,6 +5,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import ru.hogwarts.school.exception.FacultyNotFoundException;
 import ru.hogwarts.school.model.Faculty;
 import ru.hogwarts.school.repository.FacultyRepository;
 
@@ -33,35 +34,31 @@ class FacultyServiceTest {
     void addFaculty() {
         when(repository.save(any())).thenReturn(FACULTY1);
 
-        Faculty expectedFaculty = new Faculty("Hufflepuff", "Yellow");
+        Faculty expectedFaculty = new Faculty(1L,"Hufflepuff", "Yellow");
         assertEquals(out.addFaculty(any()), expectedFaculty);
     }
 
     @Test
     void getFacultyById() {
-        when(repository.findById(any())).thenReturn(Optional.of(FACULTY1));
+        when(repository.findById(1L)).thenReturn(Optional.of(FACULTY1));
 
-        Faculty expectedFaculty = new Faculty("Hufflepuff", "Yellow");
+        Faculty expectedFaculty = new Faculty(1L,"Hufflepuff", "Yellow");
         assertEquals(out.getFacultyById(1L), expectedFaculty);
     }
 
     @Test
     void changeFaculty() {
-        when(repository.save(any())).thenReturn(FACULTY2);
-
-        Faculty expectedFaculty = new Faculty("Ravenclaw", "blue");
-        assertEquals(out.updateFaculty(any(), any()), expectedFaculty);
-
+        assertThrows(FacultyNotFoundException.class, () -> out.updateFaculty(1L, FACULTY1));
     }
 
     @Test
     void deleteFaculty() {
-        assertThrows(NoSuchElementException.class, () -> out.deleteFaculty(1L));
+        assertThrows(FacultyNotFoundException.class, () -> out.deleteFaculty(1L));
     }
 
     @Test
     void getListOfFacultiesByColor() {
-        when(repository.findAll()).thenReturn(FACULTIES);
+        when(repository.findAllFacultiesByColor("green")).thenReturn(FACULTIES);
 
         List<Faculty> expectedListByAge = new ArrayList<>();
 
