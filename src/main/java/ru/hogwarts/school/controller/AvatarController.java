@@ -67,6 +67,10 @@ public class AvatarController {
     @GetMapping(value = "/get-all")
     public ResponseEntity<List<Avatar>> getAllAvatars() {
         return ResponseEntity.ok(avatarService.getAllAvatars());
+    }
 
+    @GetMapping("/get/parallel")
+    public ResponseEntity<Integer> getInteger() {
+        return avatarService.getInteger();
     }
 }

@@ -30,8 +30,9 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static ru.hogwarts.school.constants.StudentServiceTestConstants.*;
 
-@WebMvcTest (StudentController.class)
+@WebMvcTest(StudentController.class)
 public class StudentControllerTest {
     @Autowired
     private MockMvc mvc;
@@ -88,7 +89,7 @@ public class StudentControllerTest {
                 .andExpect(jsonPath("$.name").value(student1.getName()))
                 .andExpect(jsonPath("$.age").value(student1.getAge()));
 
-        verify(studentRepository, Mockito.times(1) ).save(any());
+        verify(studentRepository, Mockito.times(1)).save(any());
 
     }
 
@@ -107,7 +108,7 @@ public class StudentControllerTest {
                 .andExpect(jsonPath("$.name").value(student1.getName()))
                 .andExpect(jsonPath("$.age").value(student1.getAge()));
 
-        verify(studentRepository, Mockito.times(1) ).findById(any());
+        verify(studentRepository, Mockito.times(1)).findById(any());
 
     }
 
@@ -147,7 +148,7 @@ public class StudentControllerTest {
                 .andExpect(jsonPath("$.name").value(student1.getName()))
                 .andExpect(jsonPath("$.age").value(student1.getAge()));
 
-        verify(studentRepository, Mockito.times(1) ).save(any());
+        verify(studentRepository, Mockito.times(1)).save(any());
     }
 
     @Test
@@ -188,15 +189,15 @@ public class StudentControllerTest {
         when(studentRepository.findById(anyLong())).thenReturn(Optional.of(student1));
 
         mvc.perform(MockMvcRequestBuilders
-                .get("/student/" + student1.getId() + "/get/faculty")
-                .content(studentObject.toString())
-                .contentType(MediaType.APPLICATION_JSON)
-                .accept(MediaType.APPLICATION_JSON))
+                        .get("/student/" + student1.getId() + "/get/faculty")
+                        .content(studentObject.toString())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.name").value(student1.getFaculty().getName()))
                 .andExpect(jsonPath("$.color").value(student1.getFaculty().getColor()));
 
-        verify(studentRepository, Mockito.times(1) ).findById(any());
+        verify(studentRepository, Mockito.times(1)).findById(any());
     }
 
     @Test
@@ -245,6 +246,30 @@ public class StudentControllerTest {
         assertEquals(studentService.getLeastFiveListedStudents(), studentsList);
     }
 
+    @Test
+    public void getStudentsAverageAgeWithStreamTest() throws Exception {
+
+        when(studentRepository.findAll()).thenReturn(STUDENTS2);
+
+        assertEquals(studentService.getAverageAgeWithStream(), 12.0);
+
+    }
+
+    @Test
+    public void getStudentsNameStartsWithA() throws Exception {
+
+        List<Student> expectedList = List.of(ALAN, ALEX);
+
+        when(studentRepository.findAll()).thenReturn(STUDENTS3);
+
+        mvc.perform(MockMvcRequestBuilders
+                .get("/student/get/all-students-starts-with-A"));
+
+        verify(studentRepository, Mockito.times(1)).findAll();
+
+        assertEquals(studentService.getAllStudentsNameStartsWithA(), expectedList);
+
+    }
 
 
 }

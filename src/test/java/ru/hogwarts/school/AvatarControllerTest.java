@@ -27,6 +27,7 @@ import java.util.List;
 import java.util.Random;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -79,6 +80,11 @@ public class AvatarControllerTest {
                 .andExpect(MockMvcResultMatchers.content().json(mapper.writeValueAsString(avatarList)));
 
         assertEquals(avatarRepository.findAll(), avatarList);
+    }
+
+    @Test
+    public void getInteger() {
+        assertNotNull(avatarService.getInteger());
     }
 
     private Avatar generateRandomAvatar() {

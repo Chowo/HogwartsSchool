@@ -1,5 +1,6 @@
 package ru.hogwarts.school.service;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.multipart.MultipartFile;
 import ru.hogwarts.school.model.Avatar;
 
@@ -16,4 +17,6 @@ public interface AvatarService {
     List<Avatar> getAllAvatars(int page, int size);
 
     List<Avatar> getAllAvatars();
+
+    ResponseEntity<Integer> getInteger();
 }

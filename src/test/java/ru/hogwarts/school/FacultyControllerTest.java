@@ -213,6 +213,21 @@ public class FacultyControllerTest {
 
     }
 
+    @Test
+    public void getLongestFacultyNameTest() throws Exception {
+        Faculty faculty = new Faculty("name1", "color1");
+        faculty.setId(1L);
+        when(facultyRepository.findAll()).thenReturn(List.of(
+                faculty,
+                new Faculty(2L,"n", "color2")));
+
+        mvc.perform(MockMvcRequestBuilders
+                        .get("/faculty/get/longestFacultyName"));
+        verify(facultyRepository, Mockito.times(1) ).findAll();
+
+        assertEquals(facultyService.getLongestFacultyName(), faculty.getName());
+    }
+
 
 
 
