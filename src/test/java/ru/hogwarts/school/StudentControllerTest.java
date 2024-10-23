@@ -15,6 +15,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import ru.hogwarts.school.controller.StudentController;
+import ru.hogwarts.school.exception.NotEnoughStudentsException;
 import ru.hogwarts.school.model.Faculty;
 import ru.hogwarts.school.model.Student;
 import ru.hogwarts.school.repository.StudentRepository;
@@ -25,6 +26,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -271,6 +273,28 @@ public class StudentControllerTest {
 
     }
 
+    @Test
+    public void printStudentsNameParallelTest() throws Exception {
 
+        when(studentRepository.getSixStudents()).thenReturn(STUDENTS3);
+
+        mvc.perform(MockMvcRequestBuilders
+                .get("/student/get/students/print-parallel"));
+
+        verify(studentRepository, Mockito.times(1)).getSixStudents();
+
+    }
+
+    @Test
+    public void printStudentsNameSynchronizedTest() throws Exception {
+
+        when(studentRepository.getSixStudents()).thenReturn(STUDENTS3);
+
+        mvc.perform(MockMvcRequestBuilders
+                .get("/student/get/students/print-synchronized"));
+
+        verify(studentRepository, Mockito.times(1)).getSixStudents();
+
+    }
 }
 

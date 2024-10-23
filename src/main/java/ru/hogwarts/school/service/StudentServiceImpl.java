@@ -3,6 +3,7 @@ package ru.hogwarts.school.service;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+import ru.hogwarts.school.exception.NotEnoughStudentsException;
 import ru.hogwarts.school.exception.StudentNotFoundException;
 import ru.hogwarts.school.model.Faculty;
 import ru.hogwarts.school.model.Student;
@@ -106,6 +107,56 @@ public class StudentServiceImpl implements StudentService {
     @Override
     public double getAverageAgeWithStream() {
         return repository.findAll().stream().mapToDouble(Student::getAge).average().orElseThrow();
+    }
+
+    @Override
+    public void printStudentsParallel() {
+        if (repository.findAll().size() < 6) {
+            throw new NotEnoughStudentsException();
+        }
+        List<Student> listOfStudents = repository.getSixStudents();
+        printStudentsName(listOfStudents.get(0));
+        printStudentsName(listOfStudents.get(1));
+
+        new Thread(() -> {
+            printStudentsName(listOfStudents.get(2));
+            printStudentsName(listOfStudents.get(3));
+        }).start();
+
+        new Thread(() -> {
+            printStudentsName(listOfStudents.get(4));
+            printStudentsName(listOfStudents.get(5));
+        }).start();
+
+    }
+
+    private void printStudentsName (Student student) {
+        System.out.println(student.getName());
+    }
+
+    synchronized private void printStudentsNameSynchronized (Student student) {
+        System.out.println(student.getName());
+    }
+
+    @Override
+    public void printStudentsSynchronized() {
+        if (repository.findAll().size() < 6) {
+            throw new NotEnoughStudentsException();
+        }
+        List<Student> listOfStudents = repository.getSixStudents();
+        printStudentsNameSynchronized(listOfStudents.get(0));
+        printStudentsNameSynchronized(listOfStudents.get(1));
+
+        new Thread(() -> {
+            printStudentsNameSynchronized(listOfStudents.get(2));
+            printStudentsNameSynchronized(listOfStudents.get(3));
+        }).start();
+
+        new Thread(() -> {
+            printStudentsNameSynchronized(listOfStudents.get(4));
+            printStudentsNameSynchronized(listOfStudents.get(5));
+        }).start();
+
     }
 
 
